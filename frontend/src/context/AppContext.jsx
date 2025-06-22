@@ -7,13 +7,22 @@ export const AppContext = createContext()
 const AppContextProvider = (props) => {
 
     const currencySymbol = '₹'
-    const backendUrl = "http://localhost:4000"
-    // const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"; 
 
     const [doctors, setDoctors] = useState([])
     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
     const [userData, setUserData] = useState(false)
 
+
+        // Function to set token and save to localStorage
+    const setAuthToken = (newToken) => {
+            setToken(newToken);
+            if (newToken) {
+                localStorage.setItem('token', newToken);  // Store the token in localStorage
+            } else {
+                localStorage.removeItem('token');  // Remove token if logged out
+            }
+        };
     // Getting Doctors using API
     const getDoctosData = async () => {
 
@@ -67,7 +76,7 @@ const AppContextProvider = (props) => {
         doctors, getDoctosData,
         currencySymbol,
         backendUrl,
-        token, setToken,
+        token, setToken,setAuthToken,
         userData, setUserData, loadUserProfileData
     }
 

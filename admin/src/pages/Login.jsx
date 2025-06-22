@@ -1,18 +1,18 @@
 import axios from 'axios'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { DoctorContext } from '../context/DoctorContext'
 import { AdminContext } from '../context/AdminContext'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-
+  const navigate = useNavigate();
   const [state, setState] = useState('Admin')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  // const backendUrl = import.meta.env.VITE_BACKEND_URL
-  const backendUrl = "http://localhost:4000"
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"
 
   const { setDToken } = useContext(DoctorContext)
   const { setAToken } = useContext(AdminContext)
@@ -26,6 +26,7 @@ const Login = () => {
       if (data.success) {
         setAToken(data.token)
         localStorage.setItem('aToken', data.token)
+        navigate('/admin-dashboard');
       } else {
         toast.error(data.message)
       }
@@ -36,6 +37,8 @@ const Login = () => {
       if (data.success) {
         setDToken(data.token)
         localStorage.setItem('dToken', data.token)
+        console.log("call:", navigate("/doctor-dashboard"))
+        navigate('/doctor-dashboard');
       } else {
         toast.error(data.message)
       }

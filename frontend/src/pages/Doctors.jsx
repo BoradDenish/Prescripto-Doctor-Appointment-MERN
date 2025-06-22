@@ -37,13 +37,13 @@ const Doctors = () => {
           <p onClick={() => speciality === 'Neurologist' ? navigate('/doctors') : navigate('/doctors/Neurologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Neurologist' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Neurologist</p>
           <p onClick={() => speciality === 'Gastroenterologist' ? navigate('/doctors') : navigate('/doctors/Gastroenterologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-gray-300 rounded transition-all cursor-pointer ${speciality === 'Gastroenterologist' ? 'bg-[#E2E5FF] text-black ' : ''}`}>Gastroenterologist</p>
         </div>
-        <div className='w-full grid grid-cols-auto gap-4 gap-y-6'>
+        <div className='w-full pl-8 grid grid-cols-4 gap-4 gap-y-6'>
           {filterDoc.map((item, index) => (
-            <div onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }} className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500' key={index}>
-              <img className='bg-[#EAEFFF]' src={item.image} alt="" />
+            <div onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }} className='border border-[#C9D8FF] rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500 max-w-60' key={index}>
+              <img className='bg-[#EAEFFF] w-60 h-60 transition-transform transform hover:scale-105 hover:shadow-lg'src={item.image} alt="" />
               <div className='p-4'>
-                <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500' : "text-gray-500"}`}>
-                  <p className={`w-2 h-2 rounded-full ${item.available ? 'bg-green-500' : "bg-gray-500"}`}></p><p>{item.available ? 'Available' : "Not Available"}</p>
+                <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500' : "text-red-500"}`}>
+                  <p className={`w-2 h-2 rounded-full ${item.available ? 'bg-green-500' : "bg-red-500"}`}></p><p>{item.available ? 'Available' : "Not Available"}</p>
                 </div>
                 <p className='text-[#262626] text-lg font-medium'>{item.name}</p>
                 <p className='text-[#5C5C5C] text-sm'>{item.speciality}</p>

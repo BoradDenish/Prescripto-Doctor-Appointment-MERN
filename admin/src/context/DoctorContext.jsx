@@ -7,19 +7,20 @@ export const DoctorContext = createContext()
 
 const DoctorContextProvider = (props) => {
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001"
 
     const [dToken, setDToken] = useState(localStorage.getItem('dToken') ? localStorage.getItem('dToken') : '')
     const [appointments, setAppointments] = useState([])
     const [dashData, setDashData] = useState(false)
     const [profileData, setProfileData] = useState(false)
+    const [appointmentId, setAppointmentId] = useState(null);
 
     // Getting Doctor appointment data from Database using API
     const getAppointments = async () => {
         try {
 
             const { data } = await axios.get(backendUrl + '/api/doctor/appointments', { headers: { dToken } })
-
+            
             if (data.success) {
                 setAppointments(data.appointments.reverse())
             } else {
@@ -110,6 +111,11 @@ const DoctorContextProvider = (props) => {
         }
 
     }
+    // Function to set appointmentId
+    const handleSetAppointmentId = (id) => {
+        setAppointmentId(id);
+    };
+
 
     const value = {
         dToken, setDToken, backendUrl,
@@ -120,6 +126,7 @@ const DoctorContextProvider = (props) => {
         dashData, getDashData,
         profileData, setProfileData,
         getProfileData,
+        appointmentId, handleSetAppointmentId
     }
 
     return (

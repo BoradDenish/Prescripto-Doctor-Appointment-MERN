@@ -17,6 +17,7 @@ const Navbar = () => {
     dToken && localStorage.removeItem('dToken')
     aToken && setAToken('')
     aToken && localStorage.removeItem('aToken')
+    localStorage.removeItem("initialLoad");
   }
 
   return (

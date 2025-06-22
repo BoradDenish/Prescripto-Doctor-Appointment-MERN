@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { assets } from '../assets/assets'
 import { NavLink } from 'react-router-dom'
 import { DoctorContext } from '../context/DoctorContext'
@@ -44,6 +44,22 @@ const Sidebar = () => {
           <img className='min-w-5' src={assets.people_icon} alt='' />
           <p className='hidden md:block'>Profile</p>
         </NavLink>
+        <NavLink to={'/list-prescriptions'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`}>
+          <img className='min-w-5' src={assets.prescription_icon} alt='' />
+          <p className='hidden md:block'>Prescription List</p>
+        </NavLink>
+        <NavLink to={'/prescriptions'} >
+          
+        </NavLink>
+        {/* this is prescription link */}
+        {/* <NavLink to={'/prescriptions'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`}>
+          <img className='min-w-5' src={assets.prescription_icon} alt='' />
+          <p className='hidden md:block'>Prescription</p>
+        </NavLink> */}
+        {/* <NavLink to={'#'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-primary' : ''}`}>
+          <img className='min-w-5' src={assets.prescription} alt='' />
+          <p className='hidden md:block'>Prescription</p>
+        </NavLink> */}
       </ul>}
     </div>
   )

@@ -101,7 +101,7 @@ const addDoctor = async (req, res) => {
         // }
 
         // Image path on the local server
-        const imageUrl = `/uploads/${imageFile.filename}`;
+        const imageUrl = process.env.SERVER_URL + `/uploads/${imageFile.filename}`;
 
         const doctorData = {
             name,

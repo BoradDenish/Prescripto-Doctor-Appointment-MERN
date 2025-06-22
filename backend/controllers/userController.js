@@ -4,9 +4,11 @@ import validator from "validator";
 import userModel from "../models/userModel.js";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
-import { v2 as cloudinary } from 'cloudinary'
-import stripe from "stripe";
-import razorpay from 'razorpay';
+import PrescriptionModel from "../models/Prescription.js";
+
+// import { v2 as cloudinary } from 'cloudinary'
+// import stripe from "stripe";
+// import razorpay from 'razorpay';
 
 // // Gateway Initialize
 // const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY)
@@ -115,9 +117,13 @@ const updateProfile = async (req, res) => {
 
         if (imageFile) {
 
-            // upload image to cloudinary
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            const imageURL = imageUpload.secure_url
+            // // upload image to cloudinary
+            // const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
+            // const imageURL = imageUpload.secure_url
+    
+            // Image path on the local server
+            const imageURL = process.env.SERVER_URL + `/uploads/${imageFile.filename}`;
+
 
             await userModel.findByIdAndUpdate(userId, { image: imageURL })
         }
@@ -235,6 +241,21 @@ const listAppointment = async (req, res) => {
     }
 }
 
+const listPrescription = async (req, res) => {
+    // try {
+
+        const { userId } = req.body
+        console.log("userid",userId);
+        const prescriptions = await PrescriptionModel.find({ user_id: userId })
+        res.json({ success: true, prescriptions })
+
+//     } catch (error) {
+//         console.log(error)
+//         res.json({ success: false, message: error.message })
+//     }
+ }
+
+
 // API to make payment of appointment using razorpay
 const paymentRazorpay = async (req, res) => {
     try {
@@ -351,6 +372,8 @@ export {
     bookAppointment,
     listAppointment,
     cancelAppointment,
+    listPrescription
+    
     // paymentRazorpay,
     // verifyRazorpay,
     // paymentStripe,

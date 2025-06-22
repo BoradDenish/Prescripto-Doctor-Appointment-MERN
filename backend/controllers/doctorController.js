@@ -2,6 +2,9 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+import Prescription  from "../models/Prescription.js"
+import userModel  from "../models/userModel.js"
+
 
 // API for doctor Login 
 const loginDoctor = async (req, res) => {
@@ -174,7 +177,6 @@ const doctorDashboard = async (req, res) => {
         })
 
 
-
         const dashData = {
             earnings,
             appointments: appointments.length,
@@ -190,6 +192,83 @@ const doctorDashboard = async (req, res) => {
     }
 }
 
+
+// Function to add prescription
+const addPrescription = async (req, res) => {
+    const { appointmentId, medication, dosage, instructions } = req.body;
+
+    try {
+            const appointment = await appointmentModel.findById(appointmentId);
+            const doctorId = appointment.docId;
+            const userId = appointment.userId;
+            const userData = await userModel.findById(userId).select("-password")
+
+        // Create a new Prescription
+        const prescription = new Prescription({
+            doctor_id: doctorId,
+            user_id: userId,
+            medication,
+            dosage,
+            instructions,
+            userData
+        });
+
+        await prescription.save(); // Save prescription to database
+
+        res.json({ success: true, message: 'Prescription saved!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to save prescription.' });
+    }
+}
+const DoctorlistPrescription = async (req, res) => {
+    console.log(req.body)
+    try {
+        const searchQuery = req.query.search || '';
+        const doctorId = req.body.docId;
+
+        if (!doctorId) {
+            return res.json({ success: false, message: 'Doctor ID is required' });
+        }
+
+        const prescriptions = await Prescription.find({
+            'doctor_id': doctorId,
+            'userData.name': { $regex: searchQuery, $options: 'i' }
+        });
+
+        if (prescriptions.length > 0) {
+            res.json({ success: true, prescriptions })
+        }else{
+            res.json({ success: false, message: 'No prescriptions found' });
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+ }
+
+ const DeleteUserPrescriptions = async (req, res) => {
+    const { id } = req.body; // Now you're extracting the ID from the request body
+    console.log("id:---", id)
+    try {
+      const prescription = await Prescription.findByIdAndDelete(id);
+      if (!prescription) {
+        return res.json({ success: false, message: "Prescription not found" });
+      }
+      return res.json({ success: true, message: "Prescription deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      return res.json({ success: false, message: "An error occurred while deleting the prescription" });
+    }
+  };
+  
+    
+
+
+// module.exports = router;
+
 export {
     loginDoctor,
     appointmentsDoctor,
@@ -199,5 +278,8 @@ export {
     appointmentComplete,
     doctorDashboard,
     doctorProfile,
-    updateDoctorProfile
+    updateDoctorProfile,
+    addPrescription,
+    DoctorlistPrescription,
+    DeleteUserPrescriptions
 }
