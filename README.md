@@ -181,3 +181,38 @@ User:
 
 vandanabaldaniya123@gmail.com
 vandana123
+
+## 📦 Step-by-Step to Set This Up
+1. Install concurrently at root
+```
+npm install
+This installs all listed dependencies including concurrently.
+```
+2. Install all sub-projects at once
+```
+npm run install-all
+This installs dependencies in:
+
+admin
+
+backend
+
+frontend
+
+```
+
+3. Run all projects with one command
+
+```
+npm run dev
+This will:
+
+Start your backend server (nodemon)
+
+Start frontend Vite dev server
+
+Start admin Vite dev server
+
+Each will run in parallel in your terminal using concurrently.
+
+```
