@@ -6,33 +6,45 @@ import Prescription  from "../models/Prescription.js"
 import userModel  from "../models/userModel.js"
 
 
-// API for doctor Login 
+// API for doctor login
 const loginDoctor = async (req, res) => {
-
     try {
+        const { email, password } = req.body;
 
-        const { email, password } = req.body
-        const user = await doctorModel.findOne({ email })
-
+        const user = await doctorModel.findOne({ email });
         if (!user) {
-            return res.json({ success: false, message: "Invalid credentials" })
+            return res.status(401).json({ success: false, message: "Invalid credentials" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password)
-
-        if (isMatch) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-            res.json({ success: true, token })
-        } else {
-            res.json({ success: false, message: "Invalid credentials" })
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: "Invalid credentials" });
         }
 
+        const token = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        res.status(200).json({
+            success: true,
+            token,
+            doctor: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        console.error("Login Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
-}
+};
+
+export default loginDoctor;
+
 
 // API to get doctor appointments for doctor panel
 const appointmentsDoctor = async (req, res) => {

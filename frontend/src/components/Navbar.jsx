@@ -106,7 +106,7 @@ const Navbar = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Create account
+            Login
           </motion.button>
         )}
         <img

@@ -3,7 +3,6 @@ import appointmentModel from "../models/appointmentModel.js";
 import doctorModel from "../models/doctorModel.js";
 import bcrypt from "bcrypt";
 import validator from "validator";
-import { v2 as cloudinary } from "cloudinary";
 import userModel from "../models/userModel.js";
 
 // API for admin login
@@ -12,10 +11,9 @@ const loginAdmin = async (req, res) => {
 
         const { email, password } = req.body
 
-        // if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-        if (email === "daxil@gmail.com" && password === "123") {
-            const token = jwt.sign(email + password, process.env.JWT_SECRET)
-            res.json({ success: true, token })
+        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+            const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            res.json({ success: true, token });
         } else {
             res.json({ success: false, message: "Invalid credentials" })
         }
@@ -86,19 +84,6 @@ const addDoctor = async (req, res) => {
         // hashing user password
         const salt = await bcrypt.genSalt(10); // the more no. round the more time it will take
         const hashedPassword = await bcrypt.hash(password, salt)
-
-        // // upload image to cloudinary
-        // const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-        // const imageUrl = imageUpload.secure_url
-
-
-        // try {
-        //     const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
-        //     const imageUrl = imageUpload.secure_url;
-        // } catch (uploadError) {
-        //     console.log('Cloudinary Upload Error:', uploadError);
-        //     return res.json({ success: false, message: 'Error uploading image to Cloudinary' });
-        // }
 
         // Image path on the local server
         const imageUrl = process.env.SERVER_URL + `/uploads/${imageFile.filename}`;
