@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DoctorRegister = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -8,19 +10,50 @@ const DoctorRegister = () => {
     specialization: "",
     phone: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // const handleSubmit = async (e) => {
+  //  e.preventDefault();
+  //   await fetch("http://localhost:3000/api/register", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ ...form, role: "doctor" }),
+  //   });
+  //   // handle response...
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch("http://localhost:3000/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, role: "doctor" }),
-    });
-    // handle response...
+    setLoading(true); // start loading state
+    setError(""); // Reset any previous error
+
+    try {
+      const response = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, role: "doctor" }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Successfully registered, navigate to login or dashboard
+        navigate("/Admin"); // Replace with the route you want to navigate to
+      } else {
+        // Handle server error, show error message
+        setError(data.message || "Something went wrong!");
+      }
+    } catch (error) {
+      // Handle any unexpected errors (like network issues)
+      setError(`Failed to register. Please try again later. ${error.message}`);
+    } finally {
+      setLoading(false); // stop loading state
+    }
   };
 
   return (
@@ -79,12 +112,26 @@ const DoctorRegister = () => {
           required
           className="mb-4 w-full p-3 border border-[#DADADA] rounded-lg focus:outline-green-500 transition"
         />
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* Show error message */}
         <button
           type="submit"
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-semibold transition"
+          disabled={loading}
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
+        <div className="w-full text-center mt-2">
+          <span>
+            Already have an account?{' '}
+            <button
+              type="button"
+              className="text-primary underline font-medium"
+              onClick={() => { navigate(-1) }}
+            >
+              Login Now
+            </button>
+          </span>
+        </div>
       </form>
     </div>
   );

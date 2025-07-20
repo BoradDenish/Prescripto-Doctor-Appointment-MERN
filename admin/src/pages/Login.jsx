@@ -82,7 +82,8 @@ const Login = () => {
         >
           Login
         </button>
-        <div className="flex justify-between w-full text-sm mt-2">
+        {/* Old code */}
+        {/* <div className="flex justify-between w-full text-sm mt-2">
           <button
             type="button"
             className="text-blue-500 hover:text-blue-700 underline"
@@ -97,6 +98,26 @@ const Login = () => {
           >
             Register as Doctor
           </button>
+        </div> */}
+        {/* New code */}
+        <div className="flex justify-end w-full text-sm mt-2 items-end">
+          {state === 'Admin' ? (
+            <button
+              type="button"
+              className="text-blue-500 hover:text-blue-700 underline text-base"
+              onClick={() => navigate('/register-admin')}
+            >
+              Register as Admin
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="text-green-500 hover:text-green-700 underline text-base"
+              onClick={() => navigate('/register-doctor')}
+            >
+              Register as Doctor
+            </button>
+          )}
         </div>
         <div className="w-full text-center mt-2">
           {state === 'Admin' ? (
