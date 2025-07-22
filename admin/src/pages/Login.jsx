@@ -101,15 +101,7 @@ const Login = () => {
         </div> */}
         {/* New code */}
         <div className="flex justify-end w-full text-sm mt-2 items-end">
-          {state === 'Admin' ? (
-            <button
-              type="button"
-              className="text-blue-500 hover:text-blue-700 underline text-base"
-              onClick={() => navigate('/register-admin')}
-            >
-              Register as Admin
-            </button>
-          ) : (
+          {state === 'Doctor' ? (
             <button
               type="button"
               className="text-green-500 hover:text-green-700 underline text-base"
@@ -117,6 +109,8 @@ const Login = () => {
             >
               Register as Doctor
             </button>
+          ) : (
+            null
           )}
         </div>
         <div className="w-full text-center mt-2">

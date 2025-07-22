@@ -27,14 +27,14 @@ const AdminRegister = () => {
     setError(""); // Reset any previous error
 
     try {
-      const response = await fetch("http://localhost:5000/api/register", {
+      const response = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, role: "admin" }),
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (response.ok) {
         // Successfully registered, navigate to login or dashboard
         navigate("/Admin"); // Replace with the route you want to navigate to
