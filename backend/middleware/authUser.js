@@ -6,7 +6,7 @@ const authUser = async (req, res, next) => {
         const { token } = req.headers
 
         if (!token) {
-            return res.status(401).json({
+            return res.json({
                 success: false,
                 message: 'Not Authorized. Please login again.'
             });
@@ -22,7 +22,7 @@ const authUser = async (req, res, next) => {
 
     } catch (error) {
         console.error("User Auth Error:", error.message);
-        res.status(401).json({
+        res.json({
             success: false,
             message: 'Invalid or expired token. Please login again.'
         });

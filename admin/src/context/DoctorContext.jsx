@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useCallback } from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -93,23 +93,24 @@ const DoctorContextProvider = (props) => {
     }
 
     // Getting Doctor dashboard data using API
-    const getDashData = async () => {
+    const getDashData = useCallback(async () => {
         try {
-
-            const { data } = await axios.get(backendUrl + '/api/doctor/dashboard', { headers: { dToken } })
+            const { data } = await axios.get(backendUrl + '/api/doctor/dashboard', {
+            headers: { dToken },
+            });
 
             if (data.success) {
-                setDashData(data.dashData)
+            setDashData(data.dashData);
             } else {
-                toast.error(data.message)
+            toast.error(data.message);
             }
-
         } catch (error) {
-            console.log(error)
-            toast.error(error.message)
+            console.log(error);
+            toast.error(error.message);
         }
+        }, [backendUrl, dToken]
+    );
 
-    }
     // Function to set appointmentId
     const handleSetAppointmentId = (id) => {
         setAppointmentId(id);

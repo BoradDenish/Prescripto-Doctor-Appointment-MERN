@@ -6,7 +6,7 @@ const authDoctor = async (req, res, next) => {
         const { dtoken } = req.headers;
 
         if (!dtoken) {
-            return res.status(401).json({
+            return res.json({
                 success: false,
                 message: 'Not Authorized. Please login again.'
             });
@@ -22,7 +22,7 @@ const authDoctor = async (req, res, next) => {
 
     } catch (error) {
         console.error("Doctor Auth Error:", error.message);
-        res.status(401).json({
+        res.json({
             success: false,
             message: 'Invalid or expired token. Please login again.'
         });
