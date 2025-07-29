@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 
 const MyPrescriptions = () => {
@@ -23,7 +23,7 @@ const MyPrescriptions = () => {
 
     const getUserPrescriptions = async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/user/prescription-list', {
+            const { data } = await axiosInstance.get(backendUrl + '/api/user/prescription-list', {
                 headers: { token }, // Send the token in the header for authentication
             });
             console.log("Prescriptions", data);

@@ -5,6 +5,7 @@ import connectDB from "./config/mongodb.js";
 import userRouter from "./routes/userRoute.js";
 import doctorRouter from "./routes/doctorRoute.js";
 import adminRouter from "./routes/adminRoute.js";
+import registerRoute from "./routes/registerRoute.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -23,12 +24,14 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static("uploads"));
 
 // API endpoints
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
+app.use("/api", registerRoute);
 
 app.get("/", (req, res) => {
   res.send("API Working");

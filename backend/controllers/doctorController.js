@@ -6,33 +6,45 @@ import Prescription  from "../models/Prescription.js"
 import userModel  from "../models/userModel.js"
 
 
-// API for doctor Login 
+// API for doctor login
 const loginDoctor = async (req, res) => {
-
     try {
+        const { email, password } = req.body;
 
-        const { email, password } = req.body
-        const user = await doctorModel.findOne({ email })
-
+        const user = await doctorModel.findOne({ email });
         if (!user) {
-            return res.json({ success: false, message: "Invalid credentials" })
+            return res.json({ success: false, message: "Email address not found, please enter proper email" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password)
-
-        if (isMatch) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-            res.json({ success: true, token })
-        } else {
-            res.json({ success: false, message: "Invalid credentials" })
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.json({ success: false, message: "Please enter correct password!" });
         }
 
+        const token = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        res.status(200).json({
+            success: true,
+            token,
+            doctor: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        });
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        console.error("Login Error:", error);
+        res.json({ success: false, message: "Server error" });
     }
-}
+};
+
+export default loginDoctor;
+
 
 // API to get doctor appointments for doctor panel
 const appointmentsDoctor = async (req, res) => {
@@ -154,42 +166,43 @@ const updateDoctorProfile = async (req, res) => {
 
 // API to get dashboard data for doctor panel
 const doctorDashboard = async (req, res) => {
-    try {
-
-        const { docId } = req.body
-
-        const appointments = await appointmentModel.find({ docId })
-
-        let earnings = 0
-
-        appointments.map((item) => {
-            if (item.isCompleted || item.payment) {
-                earnings += item.amount
-            }
-        })
-
-        let patients = []
-
-        appointments.map((item) => {
-            if (!patients.includes(item.userId)) {
-                patients.push(item.userId)
-            }
-        })
-
-
-        const dashData = {
-            earnings,
-            appointments: appointments.length,
-            patients: patients.length,
-            latestAppointments: appointments.reverse()
+    
+    const { docId } = req.body
+    console.log("Doctor ID:", req.body);
+    
+    const appointments = await appointmentModel.find({ docId })
+    
+    let earnings = 0
+    
+    appointments.map((item) => {
+        if (item.isCompleted || item.payment) {
+            earnings += item.amount
         }
+    })
 
-        res.json({ success: true, dashData })
-
-    } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+    let patients = []
+    
+    appointments.map((item) => {
+        if (!patients.includes(item.userId)) {
+            patients.push(item.userId)
+        }
+    })
+    
+    
+    const dashData = {
+        earnings,
+        appointments: appointments.length,
+        patients: patients.length,
+        latestAppointments: appointments.reverse()
     }
+    
+    res.json({ success: true, dashData })
+    
+//     try {
+// } catch (error) {
+//     console.log(error)
+//         res.json({ success: false, message: error.message })
+//     }
 }
 
 

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { assets } from '../../assets/assets';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { AdminContext } from '../../context/AdminContext';
 import { AppContext } from '../../context/AppContext';
 
@@ -41,7 +41,7 @@ const AddDoctor = () => {
             formData.append('degree', degree);
             formData.append('address', JSON.stringify({ line1: address1, line2: address2 }));
 
-            const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } });
+            const { data } = await axiosInstance.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } });
             if (data.success) {
                 toast.success(data.message);
                 setDocImg(false);

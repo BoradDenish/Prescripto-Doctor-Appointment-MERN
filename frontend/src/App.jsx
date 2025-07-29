@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext } from 'react'
 import Navbar from './components/Navbar'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
@@ -14,9 +14,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 import Prescription from '../src/pages/prescription';
+import { AppContext } from './context/AppContext';
 
 const App = () => {
-  return (
+  const { token } = useContext(AppContext);
+  
+  return token ? (
     <div className='mx-4 sm:mx-[10%]'>
       <ToastContainer />
       <Navbar />
@@ -24,7 +27,6 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/doctors' element={<Doctors />} />
         <Route path='/doctors/:speciality' element={<Doctors />} />
-        <Route path='/login' element={<Login />} />
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/appointment/:docId' element={<Appointment />} />
@@ -35,6 +37,13 @@ const App = () => {
       </Routes>
       <Footer />
     </div>
+  ) : (
+    <>
+    <ToastContainer />
+      <Routes>
+        <Route path='/' element={<Login />} />
+      </Routes>
+    </>
   )
 }
 

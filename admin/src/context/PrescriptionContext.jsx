@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import axios from 'axios'
+import axiosInstance from '../api/axiosInstance';
 import { toast } from 'react-toastify'
 
 
@@ -17,7 +17,7 @@ const DoctorContextProvider = (props) => {
     const getDashData = async () => {
         try {
 
-            const { data } = await axios.get(backendUrl + '/api/doctor/dashboard', { headers: { dToken } })
+            const { data } = await axiosInstance.get(backendUrl + '/api/doctor/dashboard', { headers: { dToken } })
 
             if (data.success) {
                 setDashData(data.dashData)
