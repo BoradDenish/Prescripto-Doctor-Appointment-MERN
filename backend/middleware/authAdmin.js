@@ -8,7 +8,7 @@ const authAdmin = async (req, res, next) => {
         if (!atoken) {
             return res.json({
                 success: false,
-                message: 'Not Authorized. Please login again2222222.'
+                message: 'Not Authorized. Please login again.'
             });
         }
 
