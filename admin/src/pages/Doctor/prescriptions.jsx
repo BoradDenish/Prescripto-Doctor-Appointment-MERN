@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { DoctorContext } from '../../context/DoctorContext';
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api/axiosInstance';
 
 const PrescriptionsPage = () => {
     const { dToken, appointmentId } = useContext(DoctorContext); // Access appointmentId from context
@@ -22,7 +22,7 @@ const PrescriptionsPage = () => {
     useEffect(() => {
         const fetchPrescriptions = async () => {
             try {
-                const response = await axios.get(`${backendUrl}/api/prescriptions/${appointmentId}`, {
+                const response = await axiosInstance.get(`${backendUrl}/api/prescriptions/${appointmentId}`, {
                     headers: { dToken }
                 });
                 setPrescriptions(response.data); // Store prescriptions in state
@@ -50,7 +50,7 @@ const PrescriptionsPage = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 `${backendUrl}/api/doctor/add-prescription`,
                 { ...newPrescription, appointmentId },
                 {

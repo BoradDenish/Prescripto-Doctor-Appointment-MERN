@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       if (state === 'Sign Up') {
-        const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password });
+        const { data } = await axiosInstance.post(backendUrl + '/api/user/register', { name, email, password });
 
         if (data.success) {
           localStorage.setItem('token', data.token);
@@ -30,7 +30,7 @@ const Login = () => {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(backendUrl + '/api/user/login', { email, password });
+        const { data } = await axiosInstance.post(backendUrl + '/api/user/login', { email, password });
 
         if (data.success) {
           localStorage.setItem('token', data.token);

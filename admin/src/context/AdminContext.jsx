@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from '../api/axiosInstance';
 import { createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -71,7 +71,7 @@ const AdminContextProvider = (props) => {
 
         try {
 
-            const { data } = await axios.get(backendUrl + '/api/admin/all-doctors', { headers: { aToken } })
+            const { data } = await axiosInstance.get(backendUrl + '/api/admin/all-doctors', { headers: { aToken } })
             if (data.success) {
                 setDoctors(data.doctors)
             } else {
@@ -88,7 +88,7 @@ const AdminContextProvider = (props) => {
     const changeAvailability = async (docId) => {
         try {
 
-            const { data } = await axios.post(backendUrl + '/api/admin/change-availability', { docId }, { headers: { aToken } })
+            const { data } = await axiosInstance.post(backendUrl + '/api/admin/change-availability', { docId }, { headers: { aToken } })
             if (data.success) {
                 toast.success(data.message)
                 getAllDoctors()
@@ -108,7 +108,7 @@ const AdminContextProvider = (props) => {
 
         try {
 
-            const { data } = await axios.get(backendUrl + '/api/admin/appointments', { headers: { aToken } })
+            const { data } = await axiosInstance.get(backendUrl + '/api/admin/appointments', { headers: { aToken } })
             if (data.success) {
                 setAppointments(data.appointments.reverse())
                 // autoCancelAppointments();
@@ -128,7 +128,7 @@ const AdminContextProvider = (props) => {
 
         try {
 
-            const { data } = await axios.post(backendUrl + '/api/admin/cancel-appointment', { appointmentId }, { headers: { aToken } })
+            const { data } = await axiosInstance.post(backendUrl + '/api/admin/cancel-appointment', { appointmentId }, { headers: { aToken } })
 
             if (data.success) {
                 toast.success(data.message, appointmentId)
@@ -148,7 +148,7 @@ const AdminContextProvider = (props) => {
     const getDashData = async () => {
         try {
 
-            const { data } = await axios.get(backendUrl + '/api/admin/dashboard', { headers: { aToken } })
+            const { data } = await axiosInstance.get(backendUrl + '/api/admin/dashboard', { headers: { aToken } })
 
             if (data.success) {
                 setDashData(data.dashData)

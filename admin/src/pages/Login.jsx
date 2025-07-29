@@ -1,9 +1,9 @@
-import axios from 'axios'
 import { useContext, useState } from 'react'
 import { DoctorContext } from '../context/DoctorContext'
 import { AdminContext } from '../context/AdminContext'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Login = () => {
     event.preventDefault();
     try {
       if (state === 'Admin') {
-        const { data } = await axios.post(backendUrl + '/api/admin/login', { email, password })
+        const { data } = await axiosInstance.post(backendUrl + '/api/admin/login', { email, password })
         if (data.success) {
           setAToken(data.token)
           localStorage.setItem('aToken', data.token)
@@ -27,7 +27,7 @@ const Login = () => {
           toast.error(data.message)
         }
       } else {
-        const { data } = await axios.post(backendUrl + '/api/doctor/login', { email, password })
+        const { data } = await axiosInstance.post(backendUrl + '/api/doctor/login', { email, password })
         if (data.success) {
           setDToken(data.token)
           localStorage.setItem('dToken', data.token)

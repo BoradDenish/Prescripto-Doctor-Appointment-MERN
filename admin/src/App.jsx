@@ -16,7 +16,6 @@ import DoctorDashboard from './pages/Doctor/DoctorDashboard';
 import DoctorProfile from './pages/Doctor/DoctorProfile';
 import PrescriptionsPage from './pages/Doctor/prescriptions';
 import PrescriptionsList from './pages/Doctor/PrescriptionList';
-import AdminRegister from './pages/Admin/AdminRegister';
 import DoctorRegister from './pages/Doctor/DoctorRegister';
 
 const App = () => {
@@ -49,7 +48,6 @@ const App = () => {
     <>
       <ToastContainer />
       <Routes>
-        <Route path="/register-admin" element={<AdminRegister />} />
         <Route path="/register-doctor" element={<DoctorRegister />} />
         <Route path="*" element={<Login />} />
       </Routes>

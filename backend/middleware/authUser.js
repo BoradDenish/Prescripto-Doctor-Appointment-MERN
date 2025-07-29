@@ -23,7 +23,7 @@ const authUser = async (req, res, next) => {
     } catch (error) {
         console.error("User Auth Error:", error.message);
         res.json({
-            success: false,
+            success: 2, 
             message: 'Invalid or expired token. Please login again.'
         });
     }

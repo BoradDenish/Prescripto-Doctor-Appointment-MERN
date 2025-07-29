@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
-import axios from 'axios'
+import axiosInstance from '../api/axiosInstance';
 import { toast } from 'react-toastify'
 import { assets } from '../assets/assets'
 
@@ -23,7 +23,7 @@ const MyAppointments = () => {
     // Getting User Appointments Data Using API
     const getUserAppointments = async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/user/appointments', { headers: { token } })
+            const { data } = await axiosInstance.get(backendUrl + '/api/user/appointments', { headers: { token } })
             setAppointments(data.appointments.reverse())
 
         } catch (error) {
@@ -35,7 +35,7 @@ const MyAppointments = () => {
     // Function to cancel appointment Using API
     const cancelAppointment = async (appointmentId) => {
         try {
-            const { data } = await axios.post(backendUrl + '/api/user/cancel-appointment', { appointmentId }, { headers: { token } })
+            const { data } = await axiosInstance.post(backendUrl + '/api/user/cancel-appointment', { appointmentId }, { headers: { token } })
 
             if (data.success) {
                 toast.success(data.message)
@@ -61,7 +61,7 @@ const MyAppointments = () => {
             receipt: order.receipt,
             handler: async (response) => {
                 try {
-                    const { data } = await axios.post(backendUrl + "/api/user/verifyRazorpay", response, { headers: { token } });
+                    const { data } = await axiosInstance.post(backendUrl + "/api/user/verifyRazorpay", response, { headers: { token } });
                     if (data.success) {
                         navigate('/my-appointments')
                         getUserAppointments()
@@ -79,7 +79,7 @@ const MyAppointments = () => {
     // Function to make payment using razorpay
     const appointmentRazorpay = async (appointmentId) => {
         try {
-            const { data } = await axios.post(backendUrl + '/api/user/payment-razorpay', { appointmentId }, { headers: { token } })
+            const { data } = await axiosInstance.post(backendUrl + '/api/user/payment-razorpay', { appointmentId }, { headers: { token } })
             if (data.success) {
                 initPay(data.order)
             } else {
@@ -94,7 +94,7 @@ const MyAppointments = () => {
     // Function to make payment using stripe
     const appointmentStripe = async (appointmentId) => {
         try {
-            const { data } = await axios.post(backendUrl + '/api/user/payment-stripe', { appointmentId }, { headers: { token } })
+            const { data } = await axiosInstance.post(backendUrl + '/api/user/payment-stripe', { appointmentId }, { headers: { token } })
             if (data.success) {
                 const { session_url } = data
                 window.location.replace(session_url)
